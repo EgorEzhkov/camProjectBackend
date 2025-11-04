@@ -130,6 +130,17 @@ export class AuthService {
     return { accessToken };
   }
 
+  async validate(id: string) {
+    const user = this.prismaService.user.findUnique({
+      where: { id },
+    });
+
+    if (!user)
+      throw new NotFoundException('Пользователь не найден');
+
+    return user;
+  }
+
   private setCookie(
     res: Response,
     value: string,

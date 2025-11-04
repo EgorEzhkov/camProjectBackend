@@ -12,6 +12,7 @@ import { AuthService } from './auth.service';
 import { RegisterRequest } from './dto/register.dto';
 import { LoginRequest } from './dto/login.dto';
 import type { Request, Response } from 'express';
+import { Authorization } from './decorators/authorization.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -48,5 +49,12 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     return await this.authService.refresh(req, res);
+  }
+
+  @Authorization()
+  @Get('@me')
+  @HttpCode(HttpStatus.OK)
+  async me(@Req() req: Request) {
+    return req.user;
   }
 }
