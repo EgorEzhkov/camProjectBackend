@@ -43,5 +43,5 @@ export class RegisterRequest {
   @MaxLength(50, {
     message: 'Имя не должно превышать 50 символов',
   })
-  name: string;
+  userName: string;
 }
