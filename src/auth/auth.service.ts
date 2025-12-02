@@ -36,7 +36,7 @@ export class AuthService {
       configService.getOrThrow<string>('COOKIE_DOMAIN');
   }
   async register(res: Response, dto: RegisterRequest) {
-    const { email, name, password } = dto;
+    const { email, userName, password, login } = dto;
 
     const existUser =
       await this.prismaService.user.findUnique({
@@ -52,7 +52,8 @@ export class AuthService {
     const user = await this.prismaService.user.create({
       data: {
         email,
-        name,
+        userName,
+        login,
         password: await hash(password),
       },
     });
