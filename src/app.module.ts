@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { TariffModule } from './tariff/tariff.module';
+import { UserSubscriptionModule } from './user-subscription/user-subscription.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { TariffModule } from './tariff/tariff.module';
     AuthModule,
     ConfigModule.forRoot({ isGlobal: true }),
     TariffModule,
+    UserSubscriptionModule,
   ],
   controllers: [AppController],
   providers: [AppService],
