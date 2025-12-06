@@ -16,5 +16,18 @@ model User {
   password String
 
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updatedAt")
+  updatedAt DateTime @updatedAt @map("updated_at")
+}
+
+model Tariff {
+  id String @id @default(uuid())
+
+  name  String @unique
+  price Int
+
+  storageDays Int @map("storage_days")
+  cameraLimit Int @map("camera_limit")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 }
