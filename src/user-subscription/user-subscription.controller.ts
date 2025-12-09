@@ -34,7 +34,7 @@ export class UserSubscriptionController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.userSubscriptionService.findOne(+id);
+    return this.userSubscriptionService.findById(id);
   }
 
   @Patch(':id')
@@ -44,13 +44,13 @@ export class UserSubscriptionController {
     updateUserSubscriptionDto: UpdateUserSubscriptionDto,
   ) {
     return this.userSubscriptionService.update(
-      +id,
+      id,
       updateUserSubscriptionDto,
     );
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.userSubscriptionService.remove(+id);
+    return this.userSubscriptionService.remove(id);
   }
 }
