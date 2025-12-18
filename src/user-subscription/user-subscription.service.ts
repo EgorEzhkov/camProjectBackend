@@ -132,4 +132,20 @@ export class UserSubscriptionService {
       throw err;
     }
   }
+
+  async findByUserId(id: string) {
+    try {
+      return await this.prismaService.userSubscription.findMany(
+        {
+          where: { userId: id },
+          include: {
+            tariff: true,
+            user: { omit: { password: true } },
+          },
+        },
+      );
+    } catch (err) {
+      throw err;
+    }
+  }
 }
