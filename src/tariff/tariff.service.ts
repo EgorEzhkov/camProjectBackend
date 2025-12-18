@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   Injectable,
-  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { CreateTariffDto } from './dto/create-tariff.dto';
@@ -28,12 +27,25 @@ export class TariffService {
       throw new BadRequestException(
         'Тариф с таким именем уже существует',
       );
+    try {
+      const tariff = await this.prismaService.tariff.create(
+        {
+          data: {
+            ...createTariffDto,
+            name: name.toLowerCase(),
+          },
+        },
+      );
 
-    const tariff = await this.prismaService.tariff.create({
-      data: createTariffDto,
-    });
-
-    return tariff;
+      return tariff;
+    } catch (e) {
+      if (e.code === 'P2002') {
+        throw new BadRequestException(
+          'Тариф с таким именем уже существует',
+        );
+      }
+      throw e;
+    }
   }
 
   async findAll(): Promise<Tariff[]> {
@@ -64,7 +76,10 @@ export class TariffService {
 
       return await this.prismaService.tariff.update({
         where: { id },
-        data: updateTariffDto,
+        data: {
+          ...updateTariffDto,
+          name: updateTariffDto.name?.toLowerCase(),
+        },
       });
     } catch (e) {
       if (e.code === 'P2002') {
@@ -87,6 +102,28 @@ export class TariffService {
       return 'Тариф удалён';
     } catch (e) {
       throw e;
+    }
+  }
+
+  async getIdTarrifByName(
+    name: string,
+  ): Promise<{ id: string } | null> {
+    try {
+      if (!name)
+        throw new BadRequestException('Не валидный name');
+
+      const id = await this.prismaService.tariff.findUnique(
+        {
+          where: { name: name.toLowerCase() },
+          select: { id: true },
+        },
+      );
+      if (!id)
+        throw new NotFoundException('Тариф не найден');
+
+      return id;
+    } catch (error) {
+      throw error;
     }
   }
 }
